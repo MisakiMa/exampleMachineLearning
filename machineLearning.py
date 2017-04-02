@@ -11,7 +11,6 @@ import numpy as np
 
 
 def open_with_numpy_loadtxt(filename):
-    # data = np.loadtxt(filename, delimiter=',', skiprows=1)
     data1 = np.loadtxt(filename, delimiter=',')
     return data1
 
@@ -29,8 +28,8 @@ loss = tf.reduce_mean(tf.square(y_ - y))
 
 train_step = tf.train.GradientDescentOptimizer(0.001).minimize(loss)
 
-
-data = tf.convert_to_tensor(open_with_numpy_loadtxt("RGB.csv")) #ここは任意のデータ
+#ここは任意のデータ
+data = tf.convert_to_tensor(open_with_numpy_loadtxt("RGB.csv"))
 labels = tf.convert_to_tensor(open_with_numpy_loadtxt("label.csv"))
 
 testData = tf.convert_to_tensor(open_with_numpy_loadtxt("TestData.csv"))
