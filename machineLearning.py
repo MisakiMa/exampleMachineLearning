@@ -24,7 +24,8 @@ y = tf.nn.softmax(tf.matmul(x,W) + b)
 y_ = tf.placeholder("float",[None, 4])
 
 # cross_entropy = -tf.reduce_sum(y_ * tf.log(y))
-loss = tf.reduce_mean(tf.square(y_ - y))
+# cross_entropy = -tf.reduce_sum(y_ * tf.log(tf.clip_by_value(y,1e-10,1.0)))
+loss = tf.reduce_mean(tf.square(y - y_))
 
 train_step = tf.train.GradientDescentOptimizer(0.001).minimize(loss)
 
@@ -40,7 +41,7 @@ with tf.Session() as sess:
     sess.run(tf.global_variables_initializer())
     batch_xs =  data.eval()
     batch_ys = labels.eval()
-    for i in range(1000):
+    for i in range(10000):
         sess.run(train_step, feed_dict={x: batch_xs ,y_: batch_ys})
 
     # 結果表示
@@ -52,9 +53,9 @@ with tf.Session() as sess:
     tensor_float = tf.cast(W.eval(), tf.float64)
 
 
-    matmul2 = tf.matmul( testData.eval(),tensor_float.eval()) + b.eval()
+    matmul2 = tf.nn.softmax(tf.matmul( testData.eval(),tensor_float.eval()) + b.eval())
     print ("matmaul2:")
-    print (matmul2[0:10].eval())
+    print (matmul2[200:400].eval())
 
     answer = tf.argmax(y,1)
     print ("バイアスの値")
@@ -62,9 +63,22 @@ with tf.Session() as sess:
     print ("重みの値")
     print (W.eval())
 
+    print ("test")
+
+    # (1) テスト用データを1000サンプル取得
+    # new_x = testData[0:100].eval()
+    # new_y_ = testLabel[0:100].eval()
+    #
+    # accuracy, new_y = sess.run([train_step, y], feed_dict={x:new_x , y_:new_y_ })
+    # accuracy = tf.cast(accuracy, "float")
+    # print ("Accuracy (for test data): %6.2f%%" % accuracy)
+    # print ("True Label:", np.argmax(new_y_[0:4,], 1))
+    # print ("Est Label:", np.argmax(new_y[0:4, ], 1))
+
 
 #参考サイト
 #http://qiita.com/haminiku/items/36982ae65a770565458d
 #http://minus9d.hatenablog.com/entry/2016/03/24/233236
 #http://developers.gnavi.co.jp/entry/tensorflow-deeplearning-2_1
 #https://soarcode.jp/posts/260
+#http://qiita.com/4Ui_iUrz1/items/35a8089ab0ebc98061c1
