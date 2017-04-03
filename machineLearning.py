@@ -65,15 +65,7 @@ with tf.Session() as sess:
 
     print ("test")
 
-    # (1) テスト用データを1000サンプル取得
-    # new_x = testData[0:100].eval()
-    # new_y_ = testLabel[0:100].eval()
-    #
-    # accuracy, new_y = sess.run([train_step, y], feed_dict={x:new_x , y_:new_y_ })
-    # accuracy = tf.cast(accuracy, "float")
-    # print ("Accuracy (for test data): %6.2f%%" % accuracy)
-    # print ("True Label:", np.argmax(new_y_[0:4,], 1))
-    # print ("Est Label:", np.argmax(new_y[0:4, ], 1))
+
 
 
 #参考サイト
