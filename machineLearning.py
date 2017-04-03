@@ -25,11 +25,11 @@ y_ = tf.placeholder("float",[None, 4])
 
 # cross_entropy = -tf.reduce_sum(y_ * tf.log(y))
 # cross_entropy = -tf.reduce_sum(y_ * tf.log(tf.clip_by_value(y,1e-10,1.0)))
-loss = tf.reduce_mean(tf.square(y - y_))
+loss = tf.reduce_mean(tf.square(y - y_)) #評価関数
 
 train_step = tf.train.GradientDescentOptimizer(0.001).minimize(loss)
 
-#ここは任意のデータ
+#ここは任意のデータファイルを読み込んでテンソルに入れる
 data = tf.convert_to_tensor(open_with_numpy_loadtxt("RGB.csv"))
 labels = tf.convert_to_tensor(open_with_numpy_loadtxt("label.csv"))
 
@@ -38,9 +38,11 @@ testLabel = tf.convert_to_tensor(open_with_numpy_loadtxt("TestLabel.csv"))
 
 
 with tf.Session() as sess:
-    sess.run(tf.global_variables_initializer())
+    sess.run(tf.global_variables_initializer()) #初期化
     batch_xs =  data.eval()
     batch_ys = labels.eval()
+
+    #ここで学習している
     for i in range(10000):
         sess.run(train_step, feed_dict={x: batch_xs ,y_: batch_ys})
 
@@ -50,10 +52,11 @@ with tf.Session() as sess:
     accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))
     print (sess.run(accuracy, feed_dict={x:  testData.eval(), y_: testLabel.eval()}))
 
-    tensor_float = tf.cast(W.eval(), tf.float64)
+    weight = tf.cast(W.eval(), tf.float64)
 
+    #matmulはかけ算をしてくれます　
 
-    matmul2 = tf.nn.softmax(tf.matmul( testData.eval(),tensor_float.eval()) + b.eval())
+    matmul2 = tf.nn.softmax(tf.matmul( testData.eval(),weight.eval()) + b.eval())
     print ("matmaul2:")
     print (matmul2[200:400].eval())
 
