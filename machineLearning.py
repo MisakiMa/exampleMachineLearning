@@ -68,6 +68,7 @@ with tf.Session() as sess:
 
 
 
+
 #参考サイト
 #http://qiita.com/haminiku/items/36982ae65a770565458d
 #http://minus9d.hatenablog.com/entry/2016/03/24/233236
